@@ -1,1 +1,1 @@
-# expense_tracker_api
+# Simple Expense Tracker with NodeJS and React
