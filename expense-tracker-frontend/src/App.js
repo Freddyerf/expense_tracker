@@ -40,7 +40,7 @@ function App() {
     <div className="App">
       <h1>Expense Tracker</h1>
       <AddBudgetForm setBudgets={setBudgets} onBudgetAdded={handleAddBudget} />
-      <AddExpenseForm setExpenses={setExpenses} onExpenseAdded={handleAddExpense} />
+      <AddExpenseForm setExpenses={setExpenses} onExpenseAdded={handleAddExpense} budgets={budgets} />
       <BudgetList budgets={budgets} expenses={expenses} />
       <ExpenseList expenses={expenses} />
     </div>

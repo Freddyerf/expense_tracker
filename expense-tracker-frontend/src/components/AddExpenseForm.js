@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const AddExpenseForm = ({ onExpenseAdded }) => {
+const AddExpenseForm = ({ onExpenseAdded, budgets }) => {
   const [title, setTitle] = useState('');
   const [amount, setAmount] = useState('');
-  const [budgetId, setBudgetId] = useState('');
+  const [selectedBudgetId, setSelectedBudgetId] = useState('');
   const apiBaseUrl = 'http://localhost:3001/api';
 
   const resetForm = () => {
     setTitle('');
     setAmount('');
-    setBudgetId('');
+    setSelectedBudgetId('');
   }
   
   const handleSubmit = async (event) => {
@@ -19,14 +19,12 @@ const AddExpenseForm = ({ onExpenseAdded }) => {
       const response = await axios.post(`${apiBaseUrl}/expenses`, {
         title,
         amount,
-        budgetId
+        budgetId: selectedBudgetId
       });
-      console.log(response.data);
       onExpenseAdded(response.data); 
       resetForm();
     } catch (error) {
       console.error('There was an error creating the expense:', error.response);
-      // Handle errors here
     }
   };
 
@@ -40,6 +38,8 @@ const AddExpenseForm = ({ onExpenseAdded }) => {
           id="title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
+          placeholder='Expense Name'
+          required
         />
       </div>
       <div>
@@ -49,16 +49,25 @@ const AddExpenseForm = ({ onExpenseAdded }) => {
           id="amount"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
+          placeholder='Amount'
+          required
         />
       </div>
       <div>
-        <label htmlFor="budgetId">Budget:</label>
-        <input
-          type="text"
-          id="budgetId"
-          value={budgetId}
-          onChange={(e) => setBudgetId(e.target.value)}
-        />
+        <label htmlFor="budget">Budget:</label>
+        <select
+          id='budget'
+          value={selectedBudgetId}
+          onChange={(e) => setSelectedBudgetId(e.target.value)}
+          required
+        >
+          <option value="">Select Budget</option>
+          {budgets.map((budget) => (
+            <option key={budget.id} value={budget.id}>
+              {budget.category}
+            </option>
+          ))}
+        </select>
       </div>
       <button type="submit">Add Expense</button>
     </form>
