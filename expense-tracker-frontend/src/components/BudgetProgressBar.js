@@ -1,7 +1,7 @@
 import React from 'react';
 
 const BudgetProgressBar = ({ budget }) => {
-  const percentage = (budget.amountSpent / budget.amount) * 100;
+  const percentage = Math.round((budget.amountSpent / budget.amount) * 100);
 
   return (
     <div className="budget-progress">
