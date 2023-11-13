@@ -4,12 +4,19 @@ import BudgetList from './components/BudgetList';
 import ExpenseList from './components/ExpenseList';
 import AddBudgetForm from './components/AddBudgetForm';
 import AddExpenseForm from './components/AddExpenseForm';
+import AddButton from './components/AddButton'; 
+import Modal from './components/Modal'; 
 import './App.css';
+
 
 function App() {
   const [budgets, setBudgets] = useState([]);
   const [expenses, setExpenses] = useState([]);
   const apiBaseUrl = 'http://localhost:3001/api';
+
+  // State to control the visibility of the modals
+  const [showBudgetModal, setShowBudgetModal] = useState(false);
+  const [showExpenseModal, setShowExpenseModal] = useState(false);
 
   useEffect(() => {
     const fetchBudgetsAndExpenses = async () => {
@@ -39,8 +46,23 @@ function App() {
   return (
     <div className="App">
       <h1>Expense Tracker</h1>
-      <AddBudgetForm setBudgets={setBudgets} onBudgetAdded={handleAddBudget} />
-      <AddExpenseForm setExpenses={setExpenses} onExpenseAdded={handleAddExpense} budgets={budgets} />
+      <AddButton onClick={() => setShowBudgetModal(true)} text="Add New Budget" />
+      <AddButton onClick={() => setShowExpenseModal(true)} text="Add New Expense" />
+
+      <Modal show={showBudgetModal} onClose={() => setShowBudgetModal(false)}>
+        <AddBudgetForm onBudgetAdded={(newBudget) => {
+          handleAddBudget(newBudget);
+          setShowBudgetModal(false); // Close the modal after adding
+        }} />
+      </Modal>
+
+      <Modal show={showExpenseModal} onClose={() => setShowExpenseModal(false)}>
+        <AddExpenseForm onExpenseAdded={(newExpense) => {
+          handleAddExpense(newExpense);
+          setShowExpenseModal(false); // Close the modal after adding
+        }} budgets={budgets} />
+      </Modal>
+
       <BudgetList budgets={budgets} expenses={expenses} />
       <ExpenseList expenses={expenses} />
     </div>

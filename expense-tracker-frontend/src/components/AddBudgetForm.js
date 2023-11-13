@@ -15,12 +15,10 @@ const AddBudgetForm = ({onBudgetAdded}) => {
     event.preventDefault();
     try {
       const response = await axios.post(`${apiBaseUrl}/budgets`, { category, amount });
-      console.log(response.data);
       onBudgetAdded(response.data);
       resetForm();
     } catch (error) {
-      console.error('There was an error creating the budget:', error.response);
-      // Handle errors here
+        console.error('There was an error creating the budget:', error.response);
     }
   };
 
@@ -34,6 +32,8 @@ const AddBudgetForm = ({onBudgetAdded}) => {
           id="category"
           value={category}
           onChange={(e) => setCategory(e.target.value)}
+          placeholder='Category name'
+          required
         />
       </div>
       <div>
@@ -43,6 +43,8 @@ const AddBudgetForm = ({onBudgetAdded}) => {
           id="amount"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
+          placeholder='Amount'
+          required
         />
       </div>
       <button type="submit">Add Budget</button>
