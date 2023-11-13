@@ -1,4 +1,7 @@
-/* App.css */
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
 .budget-progress {
   margin: 10px 0;
 }

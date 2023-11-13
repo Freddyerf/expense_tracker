@@ -44,29 +44,40 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <h1>Expense Tracker</h1>
-      <AddButton onClick={() => setShowBudgetModal(true)} text="Add New Budget" />
-      <AddButton onClick={() => setShowExpenseModal(true)} text="Add New Expense" />
-
+    <div className="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
+      <div className="relative py-3 sm:max-w-xl sm:mx-auto">
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-300 to-blue-600 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
+          <div className="relative px-4 py-10 bg-white shadow-lg sm:rounded-3xl sm:p-20">
+            <div className="max-w-md mx-auto">
+              <div>
+                <h1 className="text-2xl font-semibold">Expense Tracker</h1>
+              </div>
+              <div className="divide-y divide-gray-200">
+                <div className="py-8 text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7">
+                  <AddButton onClick={() => setShowBudgetModal(true)} text="Add New Budget" />
+                  <AddButton onClick={() => setShowExpenseModal(true)} text="Add New Expense" />
+                  <BudgetList budgets={budgets} expenses={expenses} />
+                  <ExpenseList expenses={expenses} />
+                </div>
+              </div>
+            </div>
+        </div>
+      </div>
+      
       <Modal show={showBudgetModal} onClose={() => setShowBudgetModal(false)}>
         <AddBudgetForm onBudgetAdded={(newBudget) => {
           handleAddBudget(newBudget);
-          setShowBudgetModal(false); // Close the modal after adding
+          setShowBudgetModal(false);
         }} />
       </Modal>
 
       <Modal show={showExpenseModal} onClose={() => setShowExpenseModal(false)}>
         <AddExpenseForm onExpenseAdded={(newExpense) => {
           handleAddExpense(newExpense);
-          setShowExpenseModal(false); // Close the modal after adding
+          setShowExpenseModal(false);
         }} budgets={budgets} />
       </Modal>
-
-      <BudgetList budgets={budgets} expenses={expenses} />
-      <ExpenseList expenses={expenses} />
     </div>
   );
 }
-
 export default App;

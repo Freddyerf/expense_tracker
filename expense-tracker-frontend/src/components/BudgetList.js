@@ -15,8 +15,8 @@ const BudgetList = ({ budgets, expenses }) => {
   });
 
   return (
-    <div>
-      <h2>Budgets</h2>
+    <div className="mt-6">
+      <h2 className="text-xl font-bold">Budgets</h2>
       {budgetsWithTotals.map(budget => (
         <BudgetProgressBar key={budget.id} budget={budget} />
       ))}
