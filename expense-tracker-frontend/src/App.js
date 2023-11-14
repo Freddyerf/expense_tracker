@@ -4,7 +4,6 @@ import BudgetList from './components/BudgetList';
 import ExpenseList from './components/ExpenseList';
 import AddBudgetForm from './components/AddBudgetForm';
 import AddExpenseForm from './components/AddExpenseForm';
-import AddButton from './components/AddButton'; 
 import Modal from './components/Modal'; 
 import './App.css';
 
@@ -54,10 +53,8 @@ function App() {
               </div>
               <div className="divide-y divide-gray-200">
                 <div className="py-8 text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7">
-                  <AddButton onClick={() => setShowBudgetModal(true)} text="Add New Budget" />
-                  <AddButton onClick={() => setShowExpenseModal(true)} text="Add New Expense" />
-                  <BudgetList budgets={budgets} expenses={expenses} />
-                  <ExpenseList expenses={expenses} />
+                  <BudgetList budgets={budgets} expenses={expenses} onAddBudget={() => setShowBudgetModal(true)} />
+                  <ExpenseList expenses={expenses} onAddExpense={() => setShowExpenseModal(true)} />
                 </div>
               </div>
             </div>

@@ -1,9 +1,13 @@
 import React from 'react';
+import AddButton from './AddButton';
 
-const ExpenseList = ({ expenses }) => {
+const ExpenseList = ({ expenses, onAddExpense }) => {
   return (
     <div className="mt-6">
-      <h2 className="text-xl font-bold mb-4">Expenses</h2>
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-xl font-bold">Expenses</h2>
+        <AddButton onClick={onAddExpense} text="Add New Expense" />
+      </div>
       <ul className="space-y-3">
         {expenses.map((expense) => (
           <li key={expense.id} className="p-4 bg-white rounded shadow">
