@@ -6,6 +6,7 @@ import AddBudgetForm from './components/AddBudgetForm';
 import AddExpenseForm from './components/AddExpenseForm';
 import Modal from './components/Modal'; 
 import './App.css';
+import AddButton from './components/AddButton';
 
 
 function App() {
@@ -43,24 +44,54 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 py-6 flex flex-col justify-center sm:py-12">
-      <div className="relative py-3 sm:max-w-xl sm:mx-auto">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-300 to-blue-600 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
-          <div className="relative px-4 py-10 bg-white shadow-lg sm:rounded-3xl sm:p-20">
-            <div className="max-w-md mx-auto">
-              <div>
-                <h1 className="text-2xl font-semibold">Expense Tracker</h1>
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 py-6 sm:py-12">
+      <div className="relative flex flex-col w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* The blue background gradient */}
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-300 to-blue-600 shadow-lg transform skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
+        
+        <div className="bg-white shadow overflow-hidden sm:rounded-lg relative">
+          <div className="text-center">
+            <h1 className="text-2xl font-semibold">Expense Tracker</h1>
+            {/* Include any other header content here */}
+          </div>
+          
+          <div className="flex flex-col md:flex-row px-4 py-5 sm:px-6">
+            {/* Budgets Section */}
+            <div className="flex-1">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl font-bold">Budgets</h2>
+                <button
+                  onClick={() => setShowBudgetModal(true)}
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                >
+                  Add New Budget
+                </button>
               </div>
-              <div className="divide-y divide-gray-200">
-                <div className="py-8 text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7">
-                  <BudgetList budgets={budgets} expenses={expenses} onAddBudget={() => setShowBudgetModal(true)} />
-                  <ExpenseList expenses={expenses} onAddExpense={() => setShowExpenseModal(true)} />
-                </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <BudgetList budgets={budgets} expenses={expenses} />
               </div>
             </div>
+            
+            {/* Expenses Section */}
+            <div className="flex-1 mt-6 md:mt-0 md:ml-4">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl font-bold">Expenses</h2>
+                <button
+                  onClick={() => setShowExpenseModal(true)}
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                >
+                  Add New Expense
+                </button>
+              </div>
+              <div className="overflow-auto h-96">
+                <ExpenseList expenses={expenses} />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       
+      {/* Modals */}
       <Modal show={showBudgetModal} onClose={() => setShowBudgetModal(false)}>
         <AddBudgetForm onBudgetAdded={(newBudget) => {
           handleAddBudget(newBudget);
@@ -77,4 +108,5 @@ function App() {
     </div>
   );
 }
+
 export default App;
