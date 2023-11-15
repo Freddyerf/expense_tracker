@@ -1,12 +1,18 @@
 import express from 'express';
-import Expense from '../models/Expense.js';
+import {Expense, Budget} from '../models/index.js';
 
 const router = express.Router();
 
 // Get all expenses
 router.get('/', async (req, res) => {
   try {
-    const expenses = await Expense.findAll();
+    const expenses = await Expense.findAll({
+      include: [{
+        model: Budget,
+        as: 'Budget', 
+        attributes: ['category']
+      }]
+    });
     res.json(expenses);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -44,7 +50,13 @@ router.put('/:id', async (req, res) => {
       where: { id: req.params.id }
     });
     if (updated) {
-      const updatedExpense = await Expense.findByPk(req.params.id);
+      const updatedExpense = await Expense.findByPk(req.params.id, {
+        include: [{
+          model: Budget,
+          as: 'Budget', 
+          attributes: ['category']
+        }]
+      });
       res.status(200).json(updatedExpense);
     } else {
       res.status(404).json({ message: 'Expense not found' });
