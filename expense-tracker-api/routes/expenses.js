@@ -22,7 +22,13 @@ router.get('/', async (req, res) => {
 // Get a single expense by ID
 router.get('/:id', async (req, res) => {
   try {
-    const expense = await Expense.findByPk(req.params.id);
+    const expense = await Expense.findByPk(req.params.id, {
+      include: [{
+        model: Budget,
+        as: 'Budget',
+        attributes: ['category']
+      }]
+    });
     if (expense) {
       res.json(expense);
     } else {
@@ -37,7 +43,17 @@ router.get('/:id', async (req, res) => {
 router.post('/', async (req, res) => {
   try {
     const newExpense = await Expense.create(req.body);
-    res.status(201).json(newExpense);
+
+    // After creating the expense, fetch it back along with the associated Budget
+    const expenseWithBudget = await Expense.findByPk(newExpense.id, {
+      include: [{
+        model: Budget,
+        as: 'Budget', 
+        attributes: ['category']
+      }]
+    });
+
+    res.status(201).json(expenseWithBudget);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
