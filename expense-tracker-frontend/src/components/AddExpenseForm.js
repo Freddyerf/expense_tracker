@@ -5,7 +5,7 @@ const AddExpenseForm = ({ onExpenseAdded, budgets }) => {
   const [title, setTitle] = useState('');
   const [amount, setAmount] = useState('');
   const [selectedBudgetId, setSelectedBudgetId] = useState('');
-  const apiBaseUrl = 'http://localhost:3001/api';
+  const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
 
   const resetForm = () => {
     setTitle('');

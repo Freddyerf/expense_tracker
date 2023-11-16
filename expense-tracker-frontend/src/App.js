@@ -11,10 +11,11 @@ import EditExpenseForm from './components/EditExpenseForm';
 
 
 function App() {
+  const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
+
   const [budgets, setBudgets] = useState([]);
   const [expenses, setExpenses] = useState([]);
   const [selectedExpense, setSelectedExpense] = useState(null);
-  const apiBaseUrl = 'http://localhost:3001/api';
 
   // State to control the visibility of the modals
   const [showBudgetModal, setShowBudgetModal] = useState(false);
@@ -56,6 +57,7 @@ function App() {
     };
 
     fetchBudgetsAndExpenses();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleAddExpense = (newExpense) => {

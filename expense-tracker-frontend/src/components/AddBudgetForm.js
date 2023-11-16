@@ -4,7 +4,7 @@ import axios from 'axios';
 const AddBudgetForm = ({onBudgetAdded}) => {
   const [category, setCategory] = useState('');
   const [amount, setAmount] = useState('');
-  const apiBaseUrl = 'http://localhost:3001/api';
+  const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
 
   const resetForm = () => {
     setCategory('');

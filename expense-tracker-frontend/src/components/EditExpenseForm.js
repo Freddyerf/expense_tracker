@@ -7,7 +7,7 @@ const EditExpenseForm = ({ expense, onExpenseUpdated, onClose, budgets }) => {
   const [selectedBudgetId, setSelectedBudgetId] = useState(expense.budgetId);
   const [description, setDescription] = useState(expense.description || '');
   const [date, setDate] = useState(expense.date || '');
-  const apiBaseUrl = 'http://localhost:3001/api';
+  const apiBaseUrl = process.env.REACT_APP_API_BASE_URL;
 
   useEffect(() => {
     if (expense) {
