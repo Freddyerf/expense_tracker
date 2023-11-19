@@ -1,0 +1,36 @@
+name: Backend CI/CD
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'expense-tracker-api/**'
+  pull_request:
+    branches: [master]
+    paths:
+      - 'expense-tracker-api/**'
+  workflow_dispatch:  # This allows manual triggers
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14' # Use the Node.js version compatible with your project
+      - name: Install Dependencies
+        run: npm install --prefix backend
+#      - name: Run Tests
+#        run: npm test --prefix backend # Replace with your actual test script
+      - name: Deploy to Heroku
+        uses: akhileshns/heroku-deploy@v3.12.12 # This GitHub Action deploys your code to Heroku
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: "freddyerf-expense-tracker-api" # Replace with your Heroku app's name
+          heroku_email: "frondonfermin@gmail.com" # Replace with the email tied to your Heroku account
+          usedocker: false
+          branch: master # Deploy code from the master branch
+          dontautocreate: true
+          appdir: "expense-tracker-api" # Directory of your backend application
