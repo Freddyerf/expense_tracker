@@ -9,6 +9,7 @@ on:
     branches: [master]
     paths:
       - 'expense-tracker-api/**'
+  workflow_dispatch:  # This allows manual triggers
 
 jobs:
   deploy:
