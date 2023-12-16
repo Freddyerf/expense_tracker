@@ -1,5 +1,5 @@
 import { DataTypes } from 'sequelize';
-import sequelize from './database.js'; // You need to create this database configuration file
+import sequelize from './database.js';
 
 const Expense = sequelize.define('Expense', {
   title: {
@@ -24,6 +24,14 @@ const Expense = sequelize.define('Expense', {
     references: {
       model: 'Budgets', // This is a reference to another model
       key: 'id', // This is the column name of the referenced model
+    },
+  },
+  userId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: 'Users', // This references the Users model
+      key: 'id', // The id field in the Users model
     },
   },
 }, {
