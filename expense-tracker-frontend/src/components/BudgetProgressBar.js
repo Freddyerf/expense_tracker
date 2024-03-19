@@ -1,4 +1,6 @@
 import React from 'react';
+import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
+
 
 const BudgetProgressBar = ({ budget }) => {
   const rawPercentageSpent = (budget.amountSpent / budget.amount) * 100;
@@ -34,8 +36,24 @@ const BudgetProgressBar = ({ budget }) => {
           }}
         ></div>
       </div>
-      <div className="text-sm font-semibold text-gray-700">
+      <div className="flex justify-between items-center text-sm font-semibold text-gray-700">
         <span>{percentageSpent}%</span>
+        <div>
+          <button
+            // onClick={() => onEdit(budget)}
+            className="mr-2 p-1 text-blue-500 hover:text-blue-600"
+            aria-label="Edit"
+          >
+            <PencilIcon className="h-5 w-5" aria-hidden="true" />
+          </button>
+          <button
+            // onClick={() => onDelete(budget.id)}
+            className="p-1 text-red-500 hover:text-red-600"
+            aria-label="Delete"
+          >
+            <TrashIcon className="h-5 w-5" aria-hidden="true" />
+          </button>
+        </div>
       </div>
     </div>
   );
