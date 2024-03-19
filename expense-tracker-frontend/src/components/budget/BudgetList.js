@@ -1,7 +1,7 @@
 import React from 'react';
 import BudgetProgressBar from './BudgetProgressBar';
 
-const BudgetList = ({ budgets, expenses, onAddBudget }) => {
+const BudgetList = ({ budgets, expenses, onEdit, onDelete }) => {
   // Calculate the total expenses for each budget category
   const budgetsWithTotals = budgets.map(budget => {
     const totalExpenses = expenses
@@ -17,7 +17,7 @@ const BudgetList = ({ budgets, expenses, onAddBudget }) => {
   return (
     <div className="mt-6">
       {budgetsWithTotals.map(budget => (
-        <BudgetProgressBar key={budget.id} budget={budget} />
+        <BudgetProgressBar key={budget.id} budget={budget} onEdit={onEdit} onDelete={onDelete} />
       ))}
     </div>
   );

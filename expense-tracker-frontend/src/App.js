@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import BudgetList from './components/BudgetList';
-import ExpenseList from './components/ExpenseList';
-import AddBudgetForm from './components/AddBudgetForm';
-import AddExpenseForm from './components/AddExpenseForm';
-import Modal from './components/Modal'; 
 import './App.css';
-import AddButton from './components/AddButton';
-import EditExpenseForm from './components/EditExpenseForm';
 import LoginPage from './components/Login';
+import Modal from './components/common/Modal'; 
+import AddButton from './components/common/AddButton';
 import { jwtDecode } from 'jwt-decode';
+import { BudgetList, AddBudgetForm, EditBudgetForm } from './components/budget';
+import { ExpenseList, AddExpenseForm, EditExpenseForm } from './components/expense';
+
 
 
 
@@ -19,11 +17,15 @@ function App() {
   const [budgets, setBudgets] = useState([]);
   const [expenses, setExpenses] = useState([]);
   const [selectedExpense, setSelectedExpense] = useState(null);
+  const [selectedBudget, setSelectedBudget] = useState(null);
+
+
 
   // State to control the visibility of the modals
   const [showBudgetModal, setShowBudgetModal] = useState(false);
   const [showExpenseModal, setShowExpenseModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showEditBudgetModal, setShowEditBudgetModal] = useState(false);
 
   const [user, setUser] = useState(null);
 
@@ -71,14 +73,20 @@ function App() {
     setUser(null);
   };
 
-  // Function to handle the edit button click
-  const handleEditClick = (expense) => {
+  // Function to handle the edit expense button click
+  const handleEditExpenseClick = (expense) => {
     setSelectedExpense(expense);
     setShowEditModal(true);
   };
 
+  const handleEditBudgetClick = (budget) => {
+    setSelectedBudget(budget);
+    setShowEditBudgetModal(true);
+  };
+
+
   // Function to handle the delete button click
-  const handleDeleteClick = async (expenseId) => {
+  const handleDeleteExpenseClick = async (expenseId) => {
     if (window.confirm('Are you sure you want to delete this expense?')) {
       try {
         await axios.delete(`${apiBaseUrl}/expenses/${expenseId}`);
@@ -90,6 +98,19 @@ function App() {
       }
     }
   };
+  
+  const handleDeleteBudgetClick = async (budgetId) => {
+    if (window.confirm('Are you sure you want to delete this budget?')) {
+      try {
+        await axios.delete(`${apiBaseUrl}/budgets/${budgetId}`);
+        // Update the budgets state to reflect the deletion
+        setBudgets(budgets.filter((budget) => budget.id !== budgetId));
+      } catch (error) {
+        console.error('Error deleting budget:', error);
+      }
+    }
+  };
+  
 
   const fetchBudgetsAndExpenses = async () => {
     try {
@@ -145,7 +166,11 @@ function App() {
                   <AddButton onClick={() => setShowBudgetModal(true)} text="Add New Budget" />
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <BudgetList budgets={budgets} expenses={expenses} />
+                  <BudgetList 
+                    budgets={budgets} 
+                    expenses={expenses} 
+                    onEdit={handleEditBudgetClick} 
+                    onDelete={handleDeleteBudgetClick} />
                 </div>
               </div>
               
@@ -155,7 +180,10 @@ function App() {
                   <h2 className="text-xl font-semibold">Expenses</h2>
                   <AddButton onClick={() => setShowExpenseModal(true)} text="Add New Expense" />
                 </div>
-                <ExpenseList expenses={expenses} onEdit={handleEditClick} onDelete={handleDeleteClick} />
+                <ExpenseList 
+                  expenses={expenses} 
+                  onEdit={handleEditExpenseClick} 
+                  onDelete={handleDeleteExpenseClick} />
               </div>
             </div>
           </div>
@@ -189,6 +217,20 @@ function App() {
             budgets={budgets}
           />
         </Modal>
+
+        {/* Edit Budget Modal */}
+        <Modal show={showEditBudgetModal} onClose={() => setShowEditBudgetModal(false)}>
+          <EditBudgetForm
+            budget={selectedBudget}
+            onBudgetUpdated={(updatedBudget) => {
+              // Update the budgets state with the updated budget
+              setBudgets(budgets.map((budget) => budget.id === updatedBudget.id ? updatedBudget : budget));
+              setShowEditBudgetModal(false);
+            }}
+            onClose={() => setShowEditBudgetModal(false)}
+          />
+        </Modal>
+
       </div>
     </div>
 
