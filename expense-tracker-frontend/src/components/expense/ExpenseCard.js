@@ -3,9 +3,9 @@ import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 
 const ExpenseCard = ({ expense, onEdit, onDelete }) => {
   const formatDate = (dateString) => {
-    console.log(dateString);
-    const date = new Date(dateString);
-    return date.toISOString().split('T')[0]; // This will format the date as dd/mm/yy 
+    // Assuming dateString is in "YYYY-MM-DD" format
+    const [year, month, day] = dateString.split('-');
+    return `${day}/${month}/${year.slice(2)}`; // Converts to "DD/MM/YY" format
   };
   
 
