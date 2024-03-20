@@ -1,41 +1,64 @@
 import React from 'react';
-import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
+import ExpenseCard from './ExpenseCard';
 
 const ExpenseList = ({ expenses, onEdit, onDelete }) => {
-  return (
-    <div className="mt-6">
-      {/* Fixed Header */}
-      <div className="flex bg-white p-4 rounded-t-lg shadow">
-        <span className="font-bold w-1/4">Name</span>
-        <span className="font-bold w-1/4">Amount</span>
-        <span className="font-bold w-1/4">Category</span>
-        <span className="font-bold w-1/4">Actions</span>
-      </div>
+  // Parses a date string as a local date without time zone conversion.
+  const parseLocalDate = (dateStr) => {
+    const [year, month, day] = dateStr.split('-').map(Number);
+    return new Date(year, month - 1, day);
+  };
 
-      {/* Scrollable List */}
-      <ul className="space-y-3 overflow-auto h-96">
-        {expenses.map((expense) => (
-          <li key={expense.id} className="p-4 bg-white rounded shadow flex items-center justify-between">
-            <div className="w-1/4">
-              <h3 className="text-sm font-semibold text-gray-700">{expense.title}</h3>
-            </div>
-            <div className="w-1/4">
-              <span className="text-sm font-semibold text-gray-700">${expense.amount}</span>
-            </div>
-            <div className="w-1/4">
-              <p className="text-sm font-semibold text-gray-700">{expense.Budget.category}</p>
-            </div>
-            <div className="flex items-center space-x-2 w-1/4 justify-end pr-4">
-              <button onClick={() => onEdit(expense)} className="text-indigo-600 hover:text-indigo-900">
-                <PencilIcon className="h-5 w-5" aria-hidden="true" />
-              </button>
-              <button onClick={() => onDelete(expense.id)} className="text-red-600 hover:text-red-900">
-                <TrashIcon className="h-5 w-5" aria-hidden="true" />
-              </button>
-            </div>
-          </li>
-        ))}
-      </ul>
+  // Group expenses by date
+  const expensesByDate = expenses.reduce((acc, expense) => {
+    const date = parseLocalDate(expense.date);
+    const dateStr = date.toISOString().split('T')[0]; // Get the date string in the format 'yyyy-mm-dd'
+    if (!acc[dateStr]) {
+      acc[dateStr] = [];
+    }
+    acc[dateStr].push(expense);
+    return acc;
+  }, {});
+
+
+  // Convert the groups object into a sorted array of date and expenses pairs
+  const sortedGroups = Object.entries(expensesByDate).sort((a, b) => new Date(b[0]) - new Date(a[0]));
+
+  const getRelativeDateLabel = (dateStr) => {
+    const targetDate = parseLocalDate(dateStr);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Reset time to midnight for comparison
+  
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+  
+    if (targetDate.getTime() === today.getTime()) return 'Today';
+    if (targetDate.getTime() === yesterday.getTime()) return 'Yesterday';
+    // Format the date as dd/mm/yy
+    return targetDate.toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: '2-digit',
+      year: '2-digit',
+    });
+
+  }; 
+
+  return (
+    <div className="max-h-96 overflow-y-auto">
+      {sortedGroups.map(([dateStr, expensesForDate]) => (
+        <div key={dateStr}>
+          <div className="bg-gray-200 text-gray-700 px-4 py-2">
+            {getRelativeDateLabel(dateStr)}
+          </div>
+          {expensesForDate.map((expense) => (
+            <ExpenseCard
+              key={expense.id}
+              expense={expense}
+              onEdit={onEdit}
+              onDelete={onDelete}
+            />
+          ))}
+        </div>
+      ))}
     </div>
   );
 };
